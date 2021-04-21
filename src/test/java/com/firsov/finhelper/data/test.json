@@ -1,0 +1,40 @@
+{
+  "Valute": {
+    "AUD": {
+      "ID": "R01010",
+      "NumCode": "036",
+      "CharCode": "AUD",
+      "Nominal": 1,
+      "Name": "Австралийский доллар",
+      "Value": 59.637,
+      "Previous": 58.1469
+    },
+    "AZN": {
+      "ID": "R01020A",
+      "NumCode": "944",
+      "CharCode": "AZN",
+      "Nominal": 1,
+      "Name": "Азербайджанский манат",
+      "Value": 45.3095,
+      "Previous": 44.5454
+    },
+    "GBP": {
+      "ID": "R01035",
+      "NumCode": "826",
+      "CharCode": "GBP",
+      "Nominal": 1,
+      "Name": "Фунт стерлингов Соединенного королевства",
+      "Value": 106.1026,
+      "Previous": 104.4193
+    },
+    "AMD": {
+      "ID": "R01060",
+      "NumCode": "051",
+      "CharCode": "AMD",
+      "Nominal": 100,
+      "Name": "Армянских драмов",
+      "Value": 14.8228,
+      "Previous": 14.6247
+    }
+  }
+}
