@@ -12,6 +12,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    sshAntTask
 }
 
 repositories {
@@ -23,6 +24,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    sshAntTask 'org.apache.ant:ant-jsch:1.10.10'
+    implementation group: 'org.apache.ant', name: 'ant-jsch', version: '1.10.10'
     implementation('org.postgresql:postgresql')
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -40,8 +43,90 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.3'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.12.3'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+
 }
 
 test {
     useJUnitPlatform()
+}
+
+
+
+
+task cleanAndCopyJar(dependsOn: build)  {
+    doLast {
+        ant.taskdef(
+                name: 'scp',
+                classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
+                classpath: configurations.sshAntTask.asPath)
+
+        ant.taskdef(
+                name: 'ssh',
+                classname: 'org.apache.tools.ant.taskdefs.optional.ssh.SSHExec',
+                classpath: configurations.sshAntTask.asPath)
+        // Create a new file for each execution to make
+        // sure that execution doesn't fails in case
+        // idententy of host has been changed.
+        def knownHosts = File.createTempFile("knownhosts", "txt")
+        def user = 'ubuntu'
+        def host = 'ec2-13-48-248-16.eu-north-1.compute.amazonaws.com'
+        def privateKey = file('../fiolent.pem')
+
+        try {
+            ant.ssh(
+                    host: host,
+                    username: user,
+                    keyfile: privateKey,
+                    trust: true,
+                    knownhosts: knownHosts,
+                    command: "sudo rm -rf build/libs/javabot-0.0.2.jar || true"
+            )
+
+            // Example to copy files to a remote host.
+            ant.scp(
+                    file: file("build/libs/javabot-0.0.2.jar"),
+                    todir: "${user}@${host}:~/build/libs",
+                    keyfile: privateKey,
+                    trust: true,
+                    knownhosts: knownHosts
+            )
+
+
+        } finally {
+            knownHosts.delete()
+        }
+    }
+}
+
+task runBashScript(dependsOn: cleanAndCopyJar){
+    doLast {
+        ant.taskdef(
+                name: 'scp',
+                classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
+                classpath: configurations.sshAntTask.asPath)
+
+        ant.taskdef(
+                name: 'ssh',
+                classname: 'org.apache.tools.ant.taskdefs.optional.ssh.SSHExec',
+                classpath: configurations.sshAntTask.asPath)
+        def knownHosts = File.createTempFile("knownhosts", "txt")
+        def user = 'ubuntu'
+        def host = 'ec2-13-48-248-16.eu-north-1.compute.amazonaws.com'
+        def privateKey = file('../fiolent.pem')
+
+        try {
+            // Example to execute a command on the remote host.
+            ant.ssh(
+                    host: host,
+                    username: user,
+                    keyfile: privateKey,
+                    trust: true,
+                    knownhosts: knownHosts,
+                    command: "sudo bash script.sh"
+            )
+
+        } finally {
+            knownHosts.delete()
+        }
+    }
 }

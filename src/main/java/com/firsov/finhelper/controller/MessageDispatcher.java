@@ -1,6 +1,7 @@
 package com.firsov.finhelper.controller;
 
 import com.firsov.finhelper.dao.DailyNewsInterface;
+import com.firsov.finhelper.dao.DayResultsInterface;
 import com.firsov.finhelper.data.*;
 import com.firsov.finhelper.service.DefinitionCreator;
 import lombok.RequiredArgsConstructor;
@@ -21,26 +22,27 @@ public class MessageDispatcher {
     final RatesTable ratesTable;
     final DefinitionCreator definitionCreator;
     final DailyNewsInterface dailyNews;
+    final DayResultsInterface dailyResults;
 
-    @GetMapping("getDefinition/{term}")
-    public @ResponseBody
-    Definition getDefinition(@PathVariable String term) {
-        Definition definition = definitionsTable.findByTerm(term);
-        System.out.println(definition);
-        return definition;
+    @GetMapping("definition/{term}")
+    public Definition getDefinition(@PathVariable String term) {
+        return definitionsTable.findByTerm(term);
     }
 
-    @GetMapping(value = "getRate/{code}", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    ResponseContainer getRate(@PathVariable String code) {
+    @GetMapping(value = "rate/{code}", produces = APPLICATION_JSON_VALUE)
+    public ResponseContainer getRate(@PathVariable String code) {
         return definitionCreator.getDefinition(code);
     }
 
-    @GetMapping(value = "getNews", produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Map<String, String> getDailyNews() {
+    @GetMapping(value = "news", produces = APPLICATION_JSON_VALUE)
+    public Map<String, String> getDailyNews() {
         return dailyNews.getNews();
     }
-
+    @GetMapping(value = "results/{value}", produces = APPLICATION_JSON_VALUE)
+    public ResponseContainer getDailyResults(@PathVariable String value) {
+        if (value.equals("0"))
+            dailyResults.setFirstRequest();
+        return new ResponseContainer(dailyResults.getNext());
+    }
 
 }

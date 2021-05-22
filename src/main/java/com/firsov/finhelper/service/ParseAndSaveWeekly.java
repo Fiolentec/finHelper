@@ -2,8 +2,8 @@ package com.firsov.finhelper.service;
 
 import com.firsov.finhelper.dao.DailyNewsInterface;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class ParseAndSaveDaily {
+public class ParseAndSaveWeekly {
     private final DailyNewsInterface dailyNews;
 
     public void parseAndSave(String news) {
