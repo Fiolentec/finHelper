@@ -2,6 +2,7 @@ package com.firsov.finhelper.controller;
 
 import com.firsov.finhelper.dao.DailyNewsInterface;
 import com.firsov.finhelper.dao.DayResultsInterface;
+import com.firsov.finhelper.dao.WeeklyNewsInterface;
 import com.firsov.finhelper.data.*;
 import com.firsov.finhelper.service.DefinitionCreator;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class MessageDispatcher {
     final DefinitionCreator definitionCreator;
     final DailyNewsInterface dailyNews;
     final DayResultsInterface dailyResults;
+    final WeeklyNewsInterface weeklyNews;
 
     @GetMapping("definition/{term}")
     public Definition getDefinition(@PathVariable String term) {
@@ -38,11 +40,22 @@ public class MessageDispatcher {
     public Map<String, String> getDailyNews() {
         return dailyNews.getNews();
     }
+
     @GetMapping(value = "results/{value}", produces = APPLICATION_JSON_VALUE)
     public ResponseContainer getDailyResults(@PathVariable String value) {
         if (value.equals("0"))
             dailyResults.setFirstRequest();
         return new ResponseContainer(dailyResults.getNext());
+    }
+
+    @GetMapping(value = "weekly", produces = APPLICATION_JSON_VALUE)
+    public ResponseContainer getWeeklyNews() {
+        return new ResponseContainer(weeklyNews.getTodayNews());
+    }
+
+    @GetMapping(value = "weekly/{day}", produces = APPLICATION_JSON_VALUE)
+    public ResponseContainer getWeeklyNews(@PathVariable Integer day) {
+        return new ResponseContainer(weeklyNews.getDayNews(day));
     }
 
 }

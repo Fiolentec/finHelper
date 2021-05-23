@@ -1,8 +1,8 @@
 package com.firsov.finhelper.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firsov.finhelper.data.Rate;
 import com.firsov.finhelper.data.RatesTable;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
@@ -30,18 +30,18 @@ public class RateUpdater {
         JSONObject my_json = new JSONObject();
         try {
             my_json = new JSONObject(IOUtils.toString(new URL("https://www.cbr-xml-daily.ru/daily_json.js"), StandardCharsets.UTF_8));
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(String.valueOf(e));
         }
         ObjectMapper objectMapper = new ObjectMapper();
         JSONObject jsonn = my_json.getJSONObject("Valute");
         Iterator<String> keys = jsonn.keys();
         ArrayList<Rate> rates = new ArrayList<>();
-        while(keys.hasNext()) {
+        while (keys.hasNext()) {
             String key = keys.next();
             try {
                 rates.add(objectMapper.readValue(jsonn.get(key).toString(), Rate.class));
-            }catch (Exception e){
+            } catch (Exception e) {
                 log.error(String.valueOf(e));
             }
         }

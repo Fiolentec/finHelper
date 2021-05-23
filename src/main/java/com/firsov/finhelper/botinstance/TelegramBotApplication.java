@@ -2,6 +2,7 @@ package com.firsov.finhelper.botinstance;
 
 import com.firsov.finhelper.service.ParseAndSaveDaily;
 import com.firsov.finhelper.service.ParseAndSaveDayResults;
+import com.firsov.finhelper.service.ParseAndSaveWeekly;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -26,6 +27,8 @@ public class TelegramBotApplication extends TelegramLongPollingBot {
     ParseAndSaveDaily parserDailyNews;
     @Autowired
     ParseAndSaveDayResults parserDayResults;
+    @Autowired
+    ParseAndSaveWeekly parserWeeklyNews;
 
     @SneakyThrows
     @Override
@@ -35,6 +38,7 @@ public class TelegramBotApplication extends TelegramLongPollingBot {
             log.info("Get message: "+ message.getText());
             parserDailyNews.parseAndSave(message.getText());
             parserDayResults.parseAndSave(message.getText());
+            parserWeeklyNews.parseAndSave(message.getText());
             try {
                 execute(new SendMessage().setChatId(message.getChatId()).setText("Hello"));
             } catch (Exception e) {

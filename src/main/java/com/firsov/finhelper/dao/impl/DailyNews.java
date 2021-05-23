@@ -13,16 +13,16 @@ import java.util.Map;
 public class DailyNews implements DailyNewsInterface {
     HashMap<String, String> news = new HashMap<>();
 
-    public DailyNews(){
-        news.put("stockMarkets","");
-        news.put("stockMarketsAll","");
-        news.put("oil","");
-        news.put("oilAll","");
-        news.put("ruble","");
-        news.put("rubleAll","");
-        news.put("bonds","");
-        news.put("bondsAll","");
-        news.put("agenda","");
+    public DailyNews() {
+        news.put("stockMarkets", "");
+        news.put("stockMarketsAll", "");
+        news.put("oil", "");
+        news.put("oilAll", "");
+        news.put("ruble", "");
+        news.put("rubleAll", "");
+        news.put("bonds", "");
+        news.put("bondsAll", "");
+        news.put("agenda", "");
     }
 
     @Override
@@ -56,10 +56,10 @@ public class DailyNews implements DailyNewsInterface {
 
     @Override
     public void addAll(ArrayList<String> strings) {
-        addStock(strings.get(0),strings.get(1));
-        addOil(strings.get(2),strings.get(3));
-        addRuble(strings.get(4),strings.get(5));
-        addBond(strings.get(6),strings.get(7));
+        addStock(strings.get(0), strings.get(1));
+        addOil(strings.get(2), strings.get(3));
+        addRuble(strings.get(4), strings.get(5));
+        addBond(strings.get(6), strings.get(7));
         addAgenda(strings.get(8));
     }
 
