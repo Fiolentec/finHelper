@@ -4,7 +4,6 @@ import com.firsov.finhelper.service.ParseAndSaveDaily;
 import com.firsov.finhelper.service.ParseAndSaveDayResults;
 import com.firsov.finhelper.service.ParseAndSaveWeekly;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
@@ -35,12 +34,12 @@ public class TelegramBotApplication extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
         if (update.hasMessage() && message.hasText()) {
-            log.info("Get message: "+ message.getText());
+            log.info("Get message: " + message.getText());
             parserDailyNews.parseAndSave(message.getText());
             parserDayResults.parseAndSave(message.getText());
             parserWeeklyNews.parseAndSave(message.getText());
             try {
-                execute(new SendMessage().setChatId(message.getChatId()).setText("Hello"));
+                execute(new SendMessage().setChatId(message.getChatId()).setText("Сообщение принято"));
             } catch (Exception e) {
 
             }

@@ -1,12 +1,14 @@
 package com.firsov.finhelper.dao.impl;
 
 import com.firsov.finhelper.dao.DayResultsInterface;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class DayResults implements DayResultsInterface {
     ArrayList<String> results = new ArrayList<>();
     int currentResIndex = -1;
@@ -23,6 +25,10 @@ public class DayResults implements DayResultsInterface {
 
     @Override
     public void addAll(List<String> news) {
+        log.info("Added all news: ");
+        log.info(String.valueOf(news));
+        if (news.size() != 0)
+            results.clear();
         results.addAll(news);
     }
 
